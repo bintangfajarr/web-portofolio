@@ -1,14 +1,17 @@
 "use client";
 
-import { Briefcase, Pencil, Trash2, Plus } from "lucide-react";
+import { Briefcase, Pencil, Trash2, Plus, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-interface ExperienceItem {
+export interface ExperienceItem {
   id?: string;
   company: string;
   role: string;
   period: string;
   location?: string;
   bullets: string[];
+  description?: string;
+  image_urls?: string[];
   sort_order: number;
 }
 
@@ -47,54 +50,85 @@ export default function Experience({ data, isAdmin, onAdd, onEdit, onDelete }: E
           {data.map((item, index) => (
             <div key={item.id || index} className="relative animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
               {/* Timeline dot */}
-              <div className="absolute -left-8 top-1 w-4 h-4 rounded-full bg-accent border-4 border-background z-10" />
+              <div className="absolute -left-8 top-1.5 w-4 h-4 rounded-full bg-accent border-4 border-background z-10" />
 
-              <div className="bg-surface border border-border rounded-xl p-6 card-hover group">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-text-primary">{item.role}</h3>
-                    <p className="text-accent font-medium mt-1">{item.company}</p>
-                    <div className="flex items-center gap-3 mt-2 text-sm text-text-muted">
-                      <span>{item.period}</span>
-                      {item.location && (
-                        <>
-                          <span className="text-border">•</span>
-                          <span>{item.location}</span>
-                        </>
+              <div className="bg-surface border border-border rounded-xl p-6 card-hover group flex flex-col md:flex-row gap-6 items-start">
+                {/* Image Thumbnail */}
+                {item.image_urls && item.image_urls.length > 0 && (
+                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-border flex-shrink-0 bg-background relative shadow-sm">
+                    <img
+                      src={item.image_urls[0]}
+                      alt={item.company}
+                      className="w-full h-full object-cover"
+                    />
+                    {item.image_urls.length > 1 && (
+                      <span className="absolute bottom-1 right-1 px-1 py-0.5 text-[9px] font-bold rounded bg-black/60 text-white leading-none">
+                        +{item.image_urls.length - 1}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex-1 w-full">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-text-primary">{item.role}</h3>
+                      <p className="text-accent font-medium mt-1">{item.company}</p>
+                      <div className="flex items-center gap-3 mt-2 text-sm text-text-muted">
+                        <span>{item.period}</span>
+                        {item.location && (
+                          <>
+                            <span className="text-border">•</span>
+                            <span>{item.location}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {item.id && (
+                        <Link
+                          href={`/experience/${item.id}`}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
+                          id={`experience-detail-${item.id}`}
+                        >
+                          <span>Detail</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </Link>
+                      )}
+
+                      {isAdmin && item.id && (
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => onEdit(item)}
+                            className="p-2 rounded-lg hover:bg-accent/10 text-text-muted hover:text-accent transition-all"
+                            aria-label="Edit experience"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => onDelete(item.id!)}
+                            className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all"
+                            aria-label="Delete experience"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
 
-                  {isAdmin && item.id && (
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => onEdit(item)}
-                        className="p-2 rounded-lg hover:bg-accent/10 text-text-muted hover:text-accent transition-all"
-                        aria-label="Edit experience"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => onDelete(item.id!)}
-                        className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all"
-                        aria-label="Delete experience"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                  {item.bullets && item.bullets.length > 0 && (
+                    <ul className="mt-4 space-y-2">
+                      {item.bullets.map((bullet, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm text-text-muted">
+                          <span className="text-accent mt-1.5 text-xs">▸</span>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-
-                {item.bullets && item.bullets.length > 0 && (
-                  <ul className="mt-4 space-y-2">
-                    {item.bullets.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-text-muted">
-                        <span className="text-accent mt-1.5 text-xs">▸</span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
           ))}

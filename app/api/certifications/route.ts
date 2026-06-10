@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase, getServiceSupabase } from "@/lib/supabase";
+import { dbGet, dbInsert, dbUpdate, dbDelete } from "@/lib/db";
 
 function checkAdmin(request: NextRequest) {
   const adminToken = request.headers.get("x-admin-token");
@@ -7,20 +7,12 @@ function checkAdmin(request: NextRequest) {
 }
 
 export async function GET() {
-  if (!supabase) {
-    return NextResponse.json([]);
-  }
-
-  const { data, error } = await supabase
-    .from("certifications")
-    .select("*")
-    .order("sort_order", { ascending: true });
-
-  if (error) {
+  try {
+    const data = await dbGet("certifications");
+    return NextResponse.json(data);
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json(data);
 }
 
 export async function POST(request: NextRequest) {
@@ -28,19 +20,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const sb = getServiceSupabase();
-  if (!sb) {
-    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
-  }
-
-  const body = await request.json();
-  const { data, error } = await sb.from("certifications").insert(body).select().single();
-
-  if (error) {
+  try {
+    const body = await request.json();
+    const data = await dbInsert("certifications", body);
+    return NextResponse.json(data, { status: 201 });
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json(data, { status: 201 });
 }
 
 export async function PUT(request: NextRequest) {
@@ -48,20 +34,14 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const sb = getServiceSupabase();
-  if (!sb) {
-    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
-  }
-
-  const body = await request.json();
-  const { id, ...rest } = body;
-  const { data, error } = await sb.from("certifications").update(rest).eq("id", id).select().single();
-
-  if (error) {
+  try {
+    const body = await request.json();
+    const { id, ...rest } = body;
+    const data = await dbUpdate("certifications", id, rest);
+    return NextResponse.json(data);
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json(data);
 }
 
 export async function DELETE(request: NextRequest) {
@@ -69,17 +49,11 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const sb = getServiceSupabase();
-  if (!sb) {
-    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
-  }
-
-  const { id } = await request.json();
-  const { error } = await sb.from("certifications").delete().eq("id", id);
-
-  if (error) {
+  try {
+    const { id } = await request.json();
+    const res = await dbDelete("certifications", id);
+    return NextResponse.json(res);
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }
