@@ -1,44 +1,44 @@
 "use client";
 
-import { GraduationCap, Pencil, Trash2, Plus, ChevronRight } from "lucide-react";
+import { Users, Pencil, Trash2, Plus, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export interface EducationItem {
+export interface VolunteerItem {
   id?: string;
-  institution: string;
-  degree: string;
+  organization: string;
+  role: string;
   period: string;
-  gpa?: string | null;
-  notes: string[];
+  location?: string;
+  bullets: string[];
   description?: string;
   image_urls?: string[];
   sort_order: number;
 }
 
-interface EducationProps {
-  data: EducationItem[];
+interface VolunteerProps {
+  data: VolunteerItem[];
   isAdmin: boolean;
   onAdd: () => void;
-  onEdit: (item: EducationItem) => void;
+  onEdit: (item: VolunteerItem) => void;
   onDelete: (id: string) => void;
 }
 
-export default function Education({ data, isAdmin, onAdd, onEdit, onDelete }: EducationProps) {
+export default function Volunteer({ data, isAdmin, onAdd, onEdit, onDelete }: VolunteerProps) {
   return (
-    <section className="py-20 px-4 bg-surface/50" id="education">
+    <section className="py-20 px-4 bg-surface/50" id="volunteer">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-accent/10">
-              <GraduationCap className="w-6 h-6 text-accent" />
+              <Users className="w-6 h-6 text-accent" />
             </div>
-            <h2 className="text-3xl font-bold text-text-primary">Education</h2>
+            <h2 className="text-3xl font-bold text-text-primary">Organization & Volunteer</h2>
           </div>
           {isAdmin && (
             <button
               onClick={onAdd}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-all duration-200"
-              id="add-education-btn"
+              id="add-volunteer-btn"
             >
               <Plus className="w-4 h-4" />
               Add
@@ -55,14 +55,14 @@ export default function Education({ data, isAdmin, onAdd, onEdit, onDelete }: Ed
                 <div className="flex-1 w-full">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-text-primary">{item.degree}</h3>
-                      <p className="text-accent font-medium mt-1">{item.institution}</p>
+                      <h3 className="text-lg font-semibold text-text-primary">{item.role}</h3>
+                      <p className="text-accent font-medium mt-1">{item.organization}</p>
                       <div className="flex items-center gap-3 mt-2 text-sm text-text-muted">
                         <span>{item.period}</span>
-                        {item.gpa && (
+                        {item.location && (
                           <>
                             <span className="text-border">•</span>
-                            <span>GPA: {item.gpa}</span>
+                            <span>{item.location}</span>
                           </>
                         )}
                       </div>
@@ -71,9 +71,9 @@ export default function Education({ data, isAdmin, onAdd, onEdit, onDelete }: Ed
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {item.id && (
                         <Link
-                          href={`/education/${item.id}`}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
-                          id={`education-detail-${item.id}`}
+                          href={`/volunteer/${item.id}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
+                          id={`volunteer-detail-${item.id}`}
                         >
                           <span>Detail</span>
                           <ChevronRight className="w-3.5 h-3.5" />
@@ -85,14 +85,14 @@ export default function Education({ data, isAdmin, onAdd, onEdit, onDelete }: Ed
                           <button
                             onClick={() => onEdit(item)}
                             className="p-2 rounded-lg hover:bg-accent/10 text-text-muted hover:text-accent transition-all"
-                            aria-label="Edit education"
+                            aria-label="Edit volunteer"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => onDelete(item.id!)}
                             className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all"
-                            aria-label="Delete education"
+                            aria-label="Delete volunteer"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -101,12 +101,12 @@ export default function Education({ data, isAdmin, onAdd, onEdit, onDelete }: Ed
                     </div>
                   </div>
 
-                  {item.notes && item.notes.length > 0 && (
+                  {item.bullets && item.bullets.length > 0 && (
                     <ul className="mt-4 space-y-2">
-                      {item.notes.map((note, i) => (
+                      {item.bullets.map((bullet, i) => (
                         <li key={i} className="flex items-start gap-3 text-sm text-text-muted">
                           <span className="text-accent mt-1.5 text-xs">▸</span>
-                          <span>{note}</span>
+                          <span>{bullet}</span>
                         </li>
                       ))}
                     </ul>

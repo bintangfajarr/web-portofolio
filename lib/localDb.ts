@@ -8,6 +8,9 @@ import {
   defaultCertifications,
   defaultAwards,
   personalInfo,
+  defaultVolunteer,
+  defaultPublications,
+  defaultReference,
 } from "./data";
 
 const DB_FILE = path.join(process.cwd(), "lib", "local_db.json");
@@ -19,6 +22,9 @@ interface LocalData {
   skills: any[];
   certifications: any[];
   awards: any[];
+  volunteer: any[];
+  publications: any[];
+  reference: any[];
   about: any;
 }
 
@@ -59,6 +65,9 @@ function initDb(): LocalData {
     skills: defaultSkills.map((x, i) => ({ id: `skill-${i}`, ...x })),
     certifications: defaultCertifications.map((x, i) => ({ id: `cert-${i}`, ...x })),
     awards: defaultAwards.map((x, i) => ({ id: `award-${i}`, ...x })),
+    volunteer: defaultVolunteer.map((x, i) => ({ id: `vol-${i}`, ...x })),
+    publications: defaultPublications.map((x, i) => ({ id: `pub-${i}`, ...x })),
+    reference: defaultReference.map((x, i) => ({ id: `ref-${i}`, ...x })),
     about: defaultAbout,
   };
 

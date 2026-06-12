@@ -1,6 +1,7 @@
 "use client";
 
-import { ExternalLink, Pencil, Trash2 } from "lucide-react";
+import { ExternalLink, Pencil, Trash2, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -23,19 +24,17 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({
+  id,
   name,
   description,
   stack,
   github,
   demo,
-  image_urls,
   isAdmin,
   onEdit,
   onDelete,
   onClick,
 }: ProjectCardProps) {
-  const mainImage = image_urls && image_urls.length > 0 ? image_urls[0] : null;
-
   return (
     <div
       onClick={onClick}
@@ -43,23 +42,6 @@ export default function ProjectCard({
         onClick ? "cursor-pointer" : ""
       }`}
     >
-      {/* Image Header */}
-      {mainImage && (
-        <div className="relative h-48 w-full overflow-hidden bg-background border-b border-border">
-          <img
-            src={mainImage}
-            alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-          {image_urls && image_urls.length > 1 && (
-            <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-md text-[10px] text-white font-medium">
-              +{image_urls.length - 1} images
-            </div>
-          )}
-        </div>
-      )}
-
       <div className="p-6 flex flex-col flex-grow">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-3">
@@ -111,34 +93,48 @@ export default function ProjectCard({
           )}
         </div>
 
-        {/* Links */}
-        <div className="flex items-center gap-3 mt-auto pt-2 border-t border-border">
-          {github && (
-            <a
-              href={github}
-              target="_blank"
-              rel="noopener noreferrer"
+        {/* Links & Detail */}
+        <div className="flex items-center justify-between mt-auto pt-2 border-t border-border">
+          <div className="flex items-center gap-3">
+            {github && (
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
+              >
+                <GithubIcon className="w-4 h-4" />
+                Code
+              </a>
+            )}
+            {demo && (
+              <a
+                href={demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Demo
+              </a>
+            )}
+            {!github && !demo && (
+              <span className="text-xs text-text-muted">No links</span>
+            )}
+          </div>
+
+          {id && (
+            <Link
+              href={`/projects/${id}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
+              id={`projects-detail-${id}`}
             >
-              <GithubIcon className="w-4 h-4" />
-              Code
-            </a>
-          )}
-          {demo && (
-            <a
-              href={demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Demo
-            </a>
-          )}
-          {!github && !demo && (
-            <span className="text-xs text-text-muted">No links available</span>
+              <span>Detail</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           )}
         </div>
       </div>

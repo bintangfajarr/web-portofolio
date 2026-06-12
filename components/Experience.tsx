@@ -53,22 +53,6 @@ export default function Experience({ data, isAdmin, onAdd, onEdit, onDelete }: E
               <div className="absolute -left-8 top-1.5 w-4 h-4 rounded-full bg-accent border-4 border-background z-10" />
 
               <div className="bg-surface border border-border rounded-xl p-6 card-hover group flex flex-col md:flex-row gap-6 items-start">
-                {/* Image Thumbnail */}
-                {item.image_urls && item.image_urls.length > 0 && (
-                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-border flex-shrink-0 bg-background relative shadow-sm">
-                    <img
-                      src={item.image_urls[0]}
-                      alt={item.company}
-                      className="w-full h-full object-cover"
-                    />
-                    {item.image_urls.length > 1 && (
-                      <span className="absolute bottom-1 right-1 px-1 py-0.5 text-[9px] font-bold rounded bg-black/60 text-white leading-none">
-                        +{item.image_urls.length - 1}
-                      </span>
-                    )}
-                  </div>
-                )}
-
                 <div className="flex-1 w-full">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">

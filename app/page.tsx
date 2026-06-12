@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
@@ -9,6 +9,9 @@ import ProjectCard from "@/components/ProjectCard";
 import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
 import Awards from "@/components/Awards";
+import Volunteer from "@/components/Volunteer";
+import Publications from "@/components/Publications";
+import Reference from "@/components/Reference";
 import AdminModal from "@/components/AdminModal";
 import { personalInfo, defaultProjects } from "@/lib/data";
 import {
@@ -17,8 +20,11 @@ import {
   defaultSkills,
   defaultCertifications,
   defaultAwards,
+  defaultVolunteer,
+  defaultPublications,
+  defaultReference,
 } from "@/lib/data";
-import { Mail, Heart, FolderGit2, Plus, ExternalLink } from "lucide-react";
+import { Mail, Heart, FolderGit2, Plus } from "lucide-react";
 
 const LinkedinIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
@@ -45,6 +51,9 @@ export default function Home() {
   const [skills, setSkills] = useState<any[]>([]);
   const [certifications, setCertifications] = useState<any[]>([]);
   const [awards, setAwards] = useState<any[]>([]);
+  const [volunteer, setVolunteer] = useState<any[]>([]);
+  const [publications, setPublications] = useState<any[]>([]);
+  const [reference, setReference] = useState<any[]>([]);
   const [aboutInfo, setAboutInfo] = useState<any>({
     name: personalInfo.name,
     title: personalInfo.title,
@@ -57,9 +66,8 @@ export default function Home() {
     cv_url: "/cv.pdf",
   });
 
-  // Project modal & slideshow states
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+  // Projects category filter state
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   // Modal state
   const [modalConfig, setModalConfig] = useState<{
@@ -79,11 +87,6 @@ export default function Home() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-
-  // Reset active image index when project changes
-  useEffect(() => {
-    setActiveImageIndex(0);
-  }, [selectedProject]);
 
   // Check session
   useEffect(() => {
@@ -118,13 +121,16 @@ export default function Home() {
   }, []);
 
   const loadAllData = useCallback(async () => {
-    const [exp, edu, proj, sk, cert, aw, ab] = await Promise.all([
+    const [exp, edu, proj, sk, cert, aw, vol, pub, ref, ab] = await Promise.all([
       fetchData("experience"),
       fetchData("education"),
       fetchData("projects"),
       fetchData("skills"),
       fetchData("certifications"),
       fetchData("awards"),
+      fetchData("volunteer"),
+      fetchData("publications"),
+      fetchData("reference"),
       fetchData("about"),
     ]);
 
@@ -134,6 +140,9 @@ export default function Home() {
     setSkills(sk?.length ? sk : defaultSkills);
     setCertifications(cert?.length ? cert : defaultCertifications);
     setAwards(aw?.length ? aw : defaultAwards);
+    setVolunteer(vol?.length ? vol : defaultVolunteer);
+    setPublications(pub?.length ? pub : defaultPublications);
+    setReference(ref?.length ? ref : defaultReference);
     if (ab) {
       setAboutInfo(ab);
     }
@@ -226,6 +235,18 @@ export default function Home() {
     const data = await fetchData("awards");
     setAwards(data?.length ? data : defaultAwards);
   };
+  const refreshVolunteer = async () => {
+    const data = await fetchData("volunteer");
+    setVolunteer(data?.length ? data : defaultVolunteer);
+  };
+  const refreshPublications = async () => {
+    const data = await fetchData("publications");
+    setPublications(data?.length ? data : defaultPublications);
+  };
+  const refreshReference = async () => {
+    const data = await fetchData("reference");
+    setReference(data?.length ? data : defaultReference);
+  };
   const refreshAbout = async () => {
     const data = await fetchData("about");
     if (data) setAboutInfo(data);
@@ -243,7 +264,7 @@ export default function Home() {
     { key: "cv_url", label: "CV Document URL", type: "text" as const },
   ];
 
-  // Section fields with description and image_urls added
+  // Section fields with description and image_urls
   const experienceFields = [
     { key: "company", label: "Company", type: "text" as const },
     { key: "role", label: "Role", type: "text" as const },
@@ -268,6 +289,7 @@ export default function Home() {
 
   const projectFields = [
     { key: "name", label: "Project Name", type: "text" as const },
+    { key: "category", label: "Category", type: "text" as const },
     { key: "description", label: "Description", type: "textarea" as const },
     { key: "stack", label: "Tech Stack", type: "array" as const },
     { key: "github", label: "GitHub URL", type: "text" as const },
@@ -301,15 +323,62 @@ export default function Home() {
     { key: "sort_order", label: "Sort Order", type: "text" as const },
   ];
 
+  const volunteerFields = [
+    { key: "organization", label: "Organization", type: "text" as const },
+    { key: "role", label: "Role", type: "text" as const },
+    { key: "period", label: "Period", type: "text" as const },
+    { key: "location", label: "Location", type: "text" as const },
+    { key: "bullets", label: "Description Points", type: "array" as const },
+    { key: "description", label: "Detailed Explanation (For Detail Page)", type: "textarea" as const },
+    { key: "image_urls", label: "Image URLs (For Slideshow)", type: "array" as const },
+    { key: "sort_order", label: "Sort Order", type: "text" as const },
+  ];
+
+  const publicationFields = [
+    { key: "title", label: "Title", type: "text" as const },
+    { key: "publisher", label: "Publisher/Journal/Conference", type: "text" as const },
+    { key: "date", label: "Date", type: "text" as const },
+    { key: "description", label: "Detailed Explanation", type: "textarea" as const },
+    { key: "authors", label: "Authors", type: "text" as const },
+    { key: "image_urls", label: "Image URLs (For Slideshow)", type: "array" as const },
+    { key: "sort_order", label: "Sort Order", type: "text" as const },
+  ];
+
+  const referenceFields = [
+    { key: "name", label: "Name", type: "text" as const },
+    { key: "relationship", label: "Relationship/Title", type: "text" as const },
+    { key: "company", label: "Company", type: "text" as const },
+    { key: "email", label: "Email", type: "text" as const },
+    { key: "phone", label: "Phone", type: "text" as const },
+    { key: "description", label: "Description/Testimonial", type: "textarea" as const },
+    { key: "image_urls", label: "Image URLs (For Slideshow)", type: "array" as const },
+    { key: "sort_order", label: "Sort Order", type: "text" as const },
+  ];
+
+  // Projects filtering and pagination calculations
+  const [visibleProjectsCount, setVisibleProjectsCount] = useState(4);
+  
+  useEffect(() => {
+    setVisibleProjectsCount(4);
+  }, [selectedCategory]);
+
+  const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))];
+  const filteredProjects = selectedCategory === "All"
+    ? projects
+    : projects.filter((p) => p.category === selectedCategory);
+  
+  const displayedProjects = filteredProjects.slice(0, visibleProjectsCount);
+
   return (
     <main className="min-h-screen bg-background">
-      <Navbar
+      <Sidebar
         isAdmin={isAdmin}
         onAdminLogin={() => setShowLoginModal(true)}
         onAdminLogout={handleLogout}
       />
 
-      <Hero
+      <div className="lg:pl-64">
+        <Hero
         aboutInfo={aboutInfo}
         isAdmin={isAdmin}
         onEditAbout={() =>
@@ -383,76 +452,6 @@ export default function Home() {
         }
         onDelete={(id) => handleDelete("education", id, refreshEducation)}
       />
-
-      {/* Projects Section */}
-      <section className="py-20 px-4" id="projects">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-12">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-accent/10">
-                <FolderGit2 className="w-6 h-6 text-accent" />
-              </div>
-              <h2 className="text-3xl font-bold text-text-primary">Projects</h2>
-            </div>
-            {isAdmin && (
-              <button
-                onClick={() =>
-                  setModalConfig({
-                    isOpen: true,
-                    title: "Add Project",
-                    fields: projectFields,
-                    onSave: async (data) => {
-                      await apiCall("projects", "POST", {
-                        ...data,
-                        sort_order: Number(data.sort_order) || 0,
-                      });
-                      refreshProjects();
-                    },
-                  })
-                }
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-all duration-200"
-                id="add-project-btn"
-              >
-                <Plus className="w-4 h-4" />
-                Add Project
-              </button>
-            )}
-          </div>
-
-          {/* Project Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((project, index) => (
-              <div
-                key={project.id || index}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <ProjectCard
-                  {...project}
-                  isAdmin={isAdmin}
-                  onEdit={() => {
-                    setModalConfig({
-                      isOpen: true,
-                      title: "Edit Project",
-                      fields: projectFields,
-                      initialData: project,
-                      onSave: async (data) => {
-                        await apiCall("projects", "PUT", {
-                          ...data,
-                          sort_order: Number(data.sort_order) || 0,
-                        });
-                        refreshProjects();
-                      },
-                    });
-                  }}
-                  onDelete={() => project.id && handleDelete("projects", project.id, refreshProjects)}
-                  onClick={() => setSelectedProject(project)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <Skills
         data={skills}
@@ -541,6 +540,193 @@ export default function Home() {
         onDelete={(id) => handleDelete("awards", id, refreshAwards)}
       />
 
+      <Volunteer
+        data={volunteer}
+        isAdmin={isAdmin}
+        onAdd={() =>
+          setModalConfig({
+            isOpen: true,
+            title: "Add Volunteer/Org Experience",
+            fields: volunteerFields,
+            onSave: async (data) => {
+              await apiCall("volunteer", "POST", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshVolunteer();
+            },
+          })
+        }
+        onEdit={(item) =>
+          setModalConfig({
+            isOpen: true,
+            title: "Edit Volunteer/Org Experience",
+            fields: volunteerFields,
+            initialData: item,
+            onSave: async (data) => {
+              await apiCall("volunteer", "PUT", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshVolunteer();
+            },
+          })
+        }
+        onDelete={(id) => handleDelete("volunteer", id, refreshVolunteer)}
+      />
+
+      <Publications
+        data={publications}
+        isAdmin={isAdmin}
+        onAdd={() =>
+          setModalConfig({
+            isOpen: true,
+            title: "Add Publication",
+            fields: publicationFields,
+            onSave: async (data) => {
+              await apiCall("publications", "POST", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshPublications();
+            },
+          })
+        }
+        onEdit={(item) =>
+          setModalConfig({
+            isOpen: true,
+            title: "Edit Publication",
+            fields: publicationFields,
+            initialData: item,
+            onSave: async (data) => {
+              await apiCall("publications", "PUT", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshPublications();
+            },
+          })
+        }
+        onDelete={(id) => handleDelete("publications", id, refreshPublications)}
+      />
+
+      <Reference
+        data={reference}
+        isAdmin={isAdmin}
+        onAdd={() =>
+          setModalConfig({
+            isOpen: true,
+            title: "Add Reference",
+            fields: referenceFields,
+            onSave: async (data) => {
+              await apiCall("reference", "POST", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshReference();
+            },
+          })
+        }
+        onEdit={(item) =>
+          setModalConfig({
+            isOpen: true,
+            title: "Edit Reference",
+            fields: referenceFields,
+            initialData: item,
+            onSave: async (data) => {
+              await apiCall("reference", "PUT", { ...data, sort_order: Number(data.sort_order) || 0 });
+              refreshReference();
+            },
+          })
+        }
+        onDelete={(id) => handleDelete("reference", id, refreshReference)}
+      />
+
+      {/* Projects Section (at the very bottom, before footer) */}
+      <section className="py-20 px-4" id="projects">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-accent/10">
+                <FolderGit2 className="w-6 h-6 text-accent" />
+              </div>
+              <h2 className="text-3xl font-bold text-text-primary">Projects</h2>
+            </div>
+            {isAdmin && (
+              <button
+                onClick={() =>
+                  setModalConfig({
+                    isOpen: true,
+                    title: "Add Project",
+                    fields: projectFields,
+                    onSave: async (data) => {
+                      await apiCall("projects", "POST", {
+                        ...data,
+                        sort_order: Number(data.sort_order) || 0,
+                      });
+                      refreshProjects();
+                    },
+                  })
+                }
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-all duration-200"
+                id="add-project-btn"
+              >
+                <Plus className="w-4 h-4" />
+                Add Project
+              </button>
+            )}
+          </div>
+
+          {/* Category Filter Pills */}
+          {categories.length > 1 && (
+            <div className="flex flex-wrap gap-2 mb-8 items-center justify-start">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                    selectedCategory === category
+                      ? "bg-accent text-white border-accent shadow-sm"
+                      : "bg-surface text-text-muted border-border hover:border-text-muted"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Project Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {displayedProjects.map((project, index) => (
+              <div
+                key={project.id || index}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <ProjectCard
+                  {...project}
+                  isAdmin={isAdmin}
+                  onEdit={() => {
+                    setModalConfig({
+                      isOpen: true,
+                      title: "Edit Project",
+                      fields: projectFields,
+                      initialData: project,
+                      onSave: async (data) => {
+                        await apiCall("projects", "PUT", {
+                          ...data,
+                          sort_order: Number(data.sort_order) || 0,
+                        });
+                        refreshProjects();
+                      },
+                    });
+                  }}
+                  onDelete={() => project.id && handleDelete("projects", project.id, refreshProjects)}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Show More Button */}
+          {filteredProjects.length > visibleProjectsCount && (
+            <div className="flex justify-center mt-10">
+              <button
+                onClick={() => setVisibleProjectsCount((prev) => prev + 4)}
+                className="px-6 py-2.5 rounded-xl border border-border bg-surface hover:border-accent text-text-primary hover:text-accent font-semibold text-sm transition-all duration-200 shadow-sm"
+              >
+                Show More Projects
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-12 px-4 border-t border-border" id="footer">
         <div className="max-w-4xl mx-auto">
@@ -591,8 +777,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+    </div>
 
-      {/* Admin CMS Modal */}
+    {/* Admin CMS Modal */}
       <AdminModal
         isOpen={modalConfig.isOpen}
         onClose={() => setModalConfig((prev) => ({ ...prev, isOpen: false }))}
@@ -601,143 +788,6 @@ export default function Home() {
         initialData={modalConfig.initialData}
         title={modalConfig.title}
       />
-
-      {/* Project Details Modal */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-md"
-            onClick={() => setSelectedProject(null)}
-          />
-          <div className="relative bg-surface border border-border rounded-2xl w-full max-w-2xl overflow-hidden animate-fade-in-up shadow-2xl flex flex-col max-h-[90vh]">
-            {/* Close button */}
-            <button
-              onClick={() => setSelectedProject(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white/80 hover:text-white transition-all z-20"
-              aria-label="Close details"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Multiple Images Slideshow */}
-            {selectedProject.image_urls && selectedProject.image_urls.length > 0 ? (
-              <div className="h-64 md:h-80 w-full overflow-hidden relative flex-shrink-0 bg-background group">
-                <img
-                  src={selectedProject.image_urls[activeImageIndex]}
-                  alt={`${selectedProject.name} image ${activeImageIndex + 1}`}
-                  className="w-full h-full object-cover transition-all duration-350 animate-fade-in"
-                />
-                
-                {/* Left Arrow */}
-                {selectedProject.image_urls.length > 1 && (
-                  <button
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev === 0 ? selectedProject.image_urls.length - 1 : prev - 1
-                      )
-                    }
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all z-10"
-                    aria-label="Previous image"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
-                )}
-
-                {/* Right Arrow */}
-                {selectedProject.image_urls.length > 1 && (
-                  <button
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev === selectedProject.image_urls.length - 1 ? 0 : prev + 1
-                      )
-                    }
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all z-10"
-                    aria-label="Next image"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                )}
-
-                {/* Dots Indicators */}
-                {selectedProject.image_urls.length > 1 && (
-                  <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
-                    {selectedProject.image_urls.map((_: any, idx: number) => (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveImageIndex(idx)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          idx === activeImageIndex ? "bg-accent scale-125" : "bg-white/50 hover:bg-white/80"
-                        }`}
-                        aria-label={`Go to image ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent pointer-events-none" />
-              </div>
-            ) : (
-              <div className="h-24 bg-gradient-to-b from-accent/10 to-surface flex-shrink-0" />
-            )}
-
-            {/* Content */}
-            <div className="p-6 md:p-8 overflow-y-auto flex-grow">
-              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-3">
-                {selectedProject.name}
-              </h2>
-
-              {/* Tech Stack */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {selectedProject.stack?.map((tech: string, i: number) => (
-                  <span key={i} className="pill text-xs px-2.5 py-1">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Description */}
-              <div className="text-text-muted text-sm md:text-base leading-relaxed mb-6 whitespace-pre-wrap">
-                {selectedProject.description || "No description provided."}
-              </div>
-
-              {/* Action Links */}
-              <div className="flex items-center gap-4 pt-4 border-t border-border">
-                {selectedProject.github && (
-                  <a
-                    href={selectedProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-border hover:border-accent text-text-primary hover:text-accent transition-all text-sm font-medium"
-                  >
-                    <GithubIcon className="w-5 h-5" />
-                    View Code (GitHub)
-                  </a>
-                )}
-                {selectedProject.demo && (
-                  <a
-                    href={selectedProject.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white hover:bg-accent/90 transition-all text-sm font-medium shadow-lg shadow-accent/20"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    Live Demo
-                  </a>
-                )}
-                {!selectedProject.github && !selectedProject.demo && (
-                  <span className="text-xs text-text-muted">No external links available for this project.</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Login Modal */}
       {showLoginModal && (

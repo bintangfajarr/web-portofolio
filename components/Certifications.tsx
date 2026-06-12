@@ -54,25 +54,9 @@ export default function Certifications({ data, isAdmin, onAdd, onEdit, onDelete 
             >
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-2 mb-4">
-                  {/* Image Thumbnail or Icon */}
-                  {cert.image_urls && cert.image_urls.length > 0 ? (
-                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-border bg-background relative flex-shrink-0 shadow-sm">
-                      <img
-                        src={cert.image_urls[0]}
-                        alt={cert.name}
-                        className="w-full h-full object-cover"
-                      />
-                      {cert.image_urls.length > 1 && (
-                        <span className="absolute bottom-0.5 right-0.5 px-0.5 py-0.2 text-[8px] font-bold rounded bg-black/60 text-white leading-none">
-                          +{cert.image_urls.length - 1}
-                        </span>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                      <Award className="w-5 h-5 text-accent" />
-                    </div>
-                  )}
+                  <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Award className="w-5 h-5 text-accent" />
+                  </div>
 
                   {isAdmin && cert.id && (
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

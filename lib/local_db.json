@@ -127,6 +127,7 @@
     {
       "id": "proj-0",
       "name": "Transjakarta ETL Pipeline",
+      "category": "Data Engineering",
       "description": "ETL pipeline for Transjakarta transaction data, runs daily at 07:00 WIB, generates insights by card type, route, and fare",
       "stack": [
         "Apache Airflow",
@@ -144,6 +145,7 @@
     {
       "id": "proj-1",
       "name": "AI CV Evaluator",
+      "category": "Data Science",
       "description": "Backend service evaluating CVs against job descriptions; supports PDF/DOCX uploads, async pipeline, LLM prompt chaining, RAG with vector DB",
       "stack": [
         "FastAPI",
@@ -163,6 +165,7 @@
     {
       "id": "proj-2",
       "name": "Youtube ELT",
+      "category": "Data Engineering",
       "description": "Automated ELT pipeline extracting YouTube channel stats via YouTube Data API, with containerization, automated testing, and CI/CD",
       "stack": [
         "Apache Airflow",
@@ -182,6 +185,7 @@
     {
       "id": "proj-3",
       "name": "E-Commerce Data Pipeline",
+      "category": "Data Engineering",
       "description": "End-to-end batch data engineering pipeline for e-commerce data using Prefect orchestration and AWS S3 as data lake",
       "stack": [
         "Prefect",
@@ -266,7 +270,10 @@
       "issuer": "Alibaba Cloud",
       "date": "May 2024",
       "credential_id": "ACCD0119700100011147",
-      "sort_order": 1
+      "sort_order": 1,
+      "image_urls": [
+        "https://www.iweaver.ai/wp-content/uploads/2025/02/2025s-Top-7-Image-to-Text-Converters.webp"
+      ]
     },
     {
       "id": "cert-2",
@@ -325,7 +332,7 @@
     "id": "1",
     "name": "Muhammad Cahyana Bintang Fajar",
     "short_name": "Bintang Fajar",
-    "title": "Software & Data Engineer",
+    "title": "Software Engineer, Data & AI Enthusiast",
     "bio": "Passionate Software & Data Engineer with expertise in building scalable data pipelines, machine learning systems, and modern web applications. Currently working as an IT System Engineer at LG Sinarmas, managing Smart Factory MES systems.",
     "email": "bintangfazr@gmail.com",
     "phone": "+62 82130471838",
@@ -336,5 +343,40 @@
       "English (Professional)"
     ],
     "cv_url": "/cv.pdf"
-  }
+  },
+  "volunteer": [
+    {
+      "id": "vol-0",
+      "organization": "Himpunan Mahasiswa Ilmu Komputer UPI",
+      "role": "Head of Technology Division",
+      "period": "Jan 2023 – Dec 2023",
+      "location": "Bandung, Indonesia",
+      "bullets": [
+        "Led a team of 15 members to develop and maintain student portal and event sites",
+        "Organized national competitive programming contest (UPI-CPC) with 200+ participants"
+      ],
+      "sort_order": 0
+    }
+  ],
+  "publications": [
+    {
+      "id": "pub-0",
+      "title": "Time Series Analysis of Light Pollution Changes in West Java Using Satellite Imagery",
+      "publisher": "International Journal of Remote Sensing & Geoinformatics",
+      "date": "Jul 2024",
+      "description": "A research paper studying the growth of urban environments and artificial light emissions using Sentinel and VIIRS DNB data.",
+      "sort_order": 0
+    }
+  ],
+  "reference": [
+    {
+      "id": "ref-0",
+      "name": "Dr. Budi Rahardjo",
+      "relationship": "Research Supervisor",
+      "company": "Universitas Pendidikan Indonesia",
+      "email": "budi.rahardjo@upi.edu",
+      "description": "Bintang is an exceptional researcher and software engineer who consistently demonstrated top-tier problem-solving and software architecture capabilities during our research projects.",
+      "sort_order": 0
+    }
+  ]
 }

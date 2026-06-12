@@ -110,6 +110,7 @@ export const defaultEducation = [
 export const defaultProjects = [
   {
     name: "Transjakarta ETL Pipeline",
+    category: "Data Engineering",
     description:
       "ETL pipeline for Transjakarta transaction data, runs daily at 07:00 WIB, generates insights by card type, route, and fare",
     stack: ["Apache Airflow", "Python", "PostgreSQL"],
@@ -123,6 +124,7 @@ export const defaultProjects = [
   },
   {
     name: "AI CV Evaluator",
+    category: "Data Science",
     description:
       "Backend service evaluating CVs against job descriptions; supports PDF/DOCX uploads, async pipeline, LLM prompt chaining, RAG with vector DB",
     stack: ["FastAPI", "Python", "LLM", "RAG", "Vector DB"],
@@ -136,6 +138,7 @@ export const defaultProjects = [
   },
   {
     name: "Youtube ELT",
+    category: "Data Engineering",
     description:
       "Automated ELT pipeline extracting YouTube channel stats via YouTube Data API, with containerization, automated testing, and CI/CD",
     stack: ["Apache Airflow", "PostgreSQL", "Docker", "Python", "CI/CD"],
@@ -149,6 +152,7 @@ export const defaultProjects = [
   },
   {
     name: "E-Commerce Data Pipeline",
+    category: "Data Engineering",
     description:
       "End-to-end batch data engineering pipeline for e-commerce data using Prefect orchestration and AWS S3 as data lake",
     stack: ["Prefect", "AWS S3", "Python"],
@@ -279,3 +283,39 @@ export const personalInfo = {
   github: "https://github.com/bintangfajarr",
   languages: ["Indonesian (Native)", "English (Professional)"],
 };
+
+export const defaultVolunteer = [
+  {
+    organization: "Himpunan Mahasiswa Ilmu Komputer UPI",
+    role: "Head of Technology Division",
+    period: "Jan 2023 – Dec 2023",
+    location: "Bandung, Indonesia",
+    bullets: [
+      "Led a team of 15 members to develop and maintain student portal and event sites",
+      "Organized national competitive programming contest (UPI-CPC) with 200+ participants"
+    ],
+    sort_order: 0,
+  }
+];
+
+export const defaultPublications = [
+  {
+    title: "Time Series Analysis of Light Pollution Changes in West Java Using Satellite Imagery",
+    publisher: "International Journal of Remote Sensing & Geoinformatics",
+    date: "Jul 2024",
+    description: "A research paper studying the growth of urban environments and artificial light emissions using Sentinel and VIIRS DNB data.",
+    sort_order: 0,
+  }
+];
+
+export const defaultReference = [
+  {
+    name: "Dr. Budi Rahardjo",
+    relationship: "Research Supervisor",
+    company: "Universitas Pendidikan Indonesia",
+    email: "budi.rahardjo@upi.edu",
+    description: "Bintang is an exceptional researcher and software engineer who consistently demonstrated top-tier problem-solving and software architecture capabilities during our research projects.",
+    sort_order: 0,
+  }
+];
+
