@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Pencil, Trash2, Plus, ChevronRight } from "lucide-react";
+import { BookOpen, Pencil, Trash2, Plus, ChevronRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export interface PublicationItem {
@@ -12,6 +12,7 @@ export interface PublicationItem {
   authors?: string;
   image_urls?: string[];
   sort_order: number;
+  link?: string;
 }
 
 interface PublicationsProps {
@@ -21,6 +22,12 @@ interface PublicationsProps {
   onEdit: (item: PublicationItem) => void;
   onDelete: (id: string) => void;
 }
+
+const extractUrl = (desc?: string) => {
+  if (!desc) return null;
+  const match = desc.match(/https?:\/\/[^\s]+/);
+  return match ? match[0] : null;
+};
 
 export default function Publications({ data, isAdmin, onAdd, onEdit, onDelete }: PublicationsProps) {
   return (
@@ -46,63 +53,80 @@ export default function Publications({ data, isAdmin, onAdd, onEdit, onDelete }:
         </div>
 
         <div className="space-y-4">
-          {data.map((pub, index) => (
-            <div
-              key={pub.id || index}
-              className="bg-surface border border-border rounded-xl p-6 card-hover group flex flex-col md:flex-row gap-6 items-start justify-between animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.08}s` }}
-            >
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-text-primary text-lg leading-snug">{pub.title}</h3>
-                <p className="text-accent text-sm font-medium mt-1">{pub.publisher}</p>
-                {pub.date && (
-                  <p className="text-text-muted text-xs mt-1">{pub.date}</p>
-                )}
-                {pub.description && (
-                  <p className="text-text-muted text-sm mt-3 line-clamp-2 leading-relaxed">
-                    {pub.description}
-                  </p>
-                )}
-                {pub.authors && (
-                  <p className="text-text-muted/80 text-xs mt-2 italic">
-                    Authors: {pub.authors}
-                  </p>
-                )}
-              </div>
+          {data.map((pub, index) => {
+            const url = pub.link || extractUrl(pub.description);
+            const isDoi = url?.includes("doi.org");
 
-              <div className="flex items-center gap-2 flex-shrink-0">
-                {pub.id && (
-                  <Link
-                    href={`/publications/${pub.id}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
-                    id={`publications-detail-${pub.id}`}
-                  >
-                    <span>Detail</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                )}
+            return (
+              <div
+                key={pub.id || index}
+                className="bg-surface border border-border rounded-xl p-6 card-hover group flex flex-col md:flex-row gap-6 items-start justify-between animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.08}s` }}
+              >
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-text-primary text-lg leading-snug">{pub.title}</h3>
+                  <p className="text-accent text-sm font-medium mt-1">{pub.publisher}</p>
+                  {pub.date && (
+                    <p className="text-text-muted text-xs mt-1">{pub.date}</p>
+                  )}
+                  {pub.description && (
+                    <p className="text-text-muted text-sm mt-3 line-clamp-2 leading-relaxed">
+                      {pub.description}
+                    </p>
+                  )}
+                  {pub.authors && (
+                    <p className="text-text-muted/80 text-xs mt-2 italic">
+                      Authors: {pub.authors}
+                    </p>
+                  )}
+                </div>
 
-                {isAdmin && pub.id && (
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => onEdit(pub)}
-                      className="p-2 rounded-lg hover:bg-accent/10 text-text-muted hover:text-accent transition-all"
-                      aria-label="Edit publication"
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {url && (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 hover:bg-accent/20 text-accent transition-all text-xs font-semibold"
                     >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => onDelete(pub.id!)}
-                      className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all"
-                      aria-label="Delete publication"
+                      <span>{isDoi ? "DOI" : "Link"}</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+
+                  {pub.id && (
+                    <Link
+                      href={`/publications/${pub.id}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background border border-border hover:border-accent text-text-muted hover:text-accent transition-all text-xs font-semibold"
+                      id={`publications-detail-${pub.id}`}
                     >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+                      <span>Detail</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+
+                  {isAdmin && pub.id && (
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => onEdit(pub)}
+                        className="p-2 rounded-lg hover:bg-accent/10 text-text-muted hover:text-accent transition-all"
+                        aria-label="Edit publication"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(pub.id!)}
+                        className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all"
+                        aria-label="Delete publication"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

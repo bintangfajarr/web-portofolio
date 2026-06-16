@@ -340,6 +340,7 @@ export default function Home() {
     { key: "date", label: "Date", type: "text" as const },
     { key: "description", label: "Detailed Explanation", type: "textarea" as const },
     { key: "authors", label: "Authors", type: "text" as const },
+    { key: "link", label: "Publication / DOI Link (Optional)", type: "text" as const },
     { key: "image_urls", label: "Image URLs (For Slideshow)", type: "array" as const },
     { key: "sort_order", label: "Sort Order", type: "text" as const },
   ];

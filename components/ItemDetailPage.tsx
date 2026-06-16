@@ -173,11 +173,19 @@ export default function ItemDetailPage({ endpoint, id }: ItemDetailPageProps) {
           {/* Main image at the top of the detail page */}
           {mainImage ? (
             <div className="h-64 sm:h-96 w-full overflow-hidden relative bg-background border-b border-border">
-              <img
-                src={mainImage}
-                alt={`${mainTitle} main image`}
-                className="w-full h-full object-cover transition-all duration-350"
-              />
+              {mainImage.toLowerCase().endsWith(".pdf") ? (
+                <iframe
+                  src={`${mainImage}#toolbar=0&navpanes=0`}
+                  className="w-full h-full border-none"
+                  title="PDF Preview"
+                />
+              ) : (
+                <img
+                  src={mainImage}
+                  alt={`${mainTitle} main image`}
+                  className="w-full h-full object-cover transition-all duration-350"
+                />
+              )}
             </div>
           ) : (
             <div className="h-12 bg-gradient-to-r from-accent/10 to-transparent border-b border-border" />
@@ -257,10 +265,11 @@ export default function ItemDetailPage({ endpoint, id }: ItemDetailPageProps) {
               </div>
             )}
 
-            {/* Action Links for Projects */}
-            {endpoint === "projects" && (item.github || item.demo) && (
+            {/* Action Links for Projects or Publications */}
+            {((endpoint === "projects" && (item.github || item.demo)) ||
+              (endpoint === "publications" && (item.link || item.description?.match(/https?:\/\/[^\s]+/)))) && (
               <div className="flex items-center gap-4 pt-6 border-t border-border mt-6">
-                {item.github && (
+                {endpoint === "projects" && item.github && (
                   <a
                     href={item.github}
                     target="_blank"
@@ -271,7 +280,7 @@ export default function ItemDetailPage({ endpoint, id }: ItemDetailPageProps) {
                     View Code (GitHub)
                   </a>
                 )}
-                {item.demo && (
+                {endpoint === "projects" && item.demo && (
                   <a
                     href={item.demo}
                     target="_blank"
@@ -282,6 +291,22 @@ export default function ItemDetailPage({ endpoint, id }: ItemDetailPageProps) {
                     Live Demo
                   </a>
                 )}
+                {endpoint === "publications" && (() => {
+                  const url = item.link || item.description?.match(/https?:\/\/[^\s]+/)?.[0];
+                  if (!url) return null;
+                  const isDoi = url.includes("doi.org");
+                  return (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white hover:bg-accent/90 transition-all text-sm font-semibold shadow-lg shadow-accent/20"
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                      {isDoi ? "View DOI" : "View Publication"}
+                    </a>
+                  );
+                })()}
               </div>
             )}
 
@@ -292,23 +317,33 @@ export default function ItemDetailPage({ endpoint, id }: ItemDetailPageProps) {
                   Media Gallery ({item.image_urls.length} images)
                 </h2>
                 <div className="flex flex-wrap gap-3">
-                  {item.image_urls.map((img: string, idx: number) => (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-20 h-20 rounded-lg overflow-hidden border transition-all ${
-                        idx === activeImageIndex
-                          ? "border-accent ring-2 ring-accent/20 scale-105"
-                          : "border-border hover:border-text-muted hover:scale-102"
-                      }`}
-                    >
-                      <img
-                        src={img}
-                        alt={`Thumbnail ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+                  {item.image_urls.map((img: string, idx: number) => {
+                    const isPdf = img.toLowerCase().endsWith(".pdf");
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveImageIndex(idx)}
+                        className={`relative w-20 h-20 rounded-lg overflow-hidden border transition-all flex items-center justify-center bg-background/50 ${
+                          idx === activeImageIndex
+                            ? "border-accent ring-2 ring-accent/20 scale-105"
+                            : "border-border hover:border-text-muted hover:scale-102"
+                        }`}
+                      >
+                        {isPdf ? (
+                          <div className="flex flex-col items-center justify-center p-1 text-center">
+                            <FileText className="w-6 h-6 text-red-500" />
+                            <span className="text-[10px] font-semibold text-text-muted mt-1 uppercase tracking-wider">PDF</span>
+                          </div>
+                        ) : (
+                          <img
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

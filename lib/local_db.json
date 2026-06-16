@@ -7,11 +7,11 @@
       "period": "Nov 2025 – Present",
       "location": "Karawang, Indonesia",
       "bullets": [
-        "Ensure smooth operation of Smart Factory systems in the battery manufacturing industry",
-        "Manage and monitor MES (Manufacturing Execution System) to align production with work orders",
-        "Perform root cause analysis; troubleshoot using SQL Server, Oracle SQL, and BizActor",
-        "Support remote MES projects for four battery plants in the USA (Ultium Cells, Nexstar Energy, ESHD, ESMI)",
-        "Completed battery manufacturing training at HLI (LG Energy Solution & Hyundai Motors JV)"
+        "Monitor Equipment Interface Function (EIF) systems connecting PLC-controlled machines with the MES in a manufacturing environment",
+        "Manage and monitor the MES (Manufacturing Execution System) to align production with rules and work orders",
+        "Perform root cause analysis of system issues and provide solutions with proper reporting; troubleshoot errors by analyzing data flows using SQL Server and Oracle SQL, and investigate using BizActor and LogViewer",
+        "Support remote MES projects across battery plants in the USA and Canada, including Tennessee (General Motors), Ohio (General Motors & Honda), Michigan (Holland & Lansing), Georgia (Hyundai Group), and Ontario",
+        "Completed battery manufacturing, MES, and EIF training, and trained new hires at HLI (LG Energy Solution & Hyundai Motors joint venture)"
       ],
       "sort_order": 0,
       "description": "This is a detailed description of my system engineering role. It involves managing the Smart Factory system, production monitoring, and remote support for US plants.",
@@ -361,21 +361,46 @@
   "publications": [
     {
       "id": "pub-0",
-      "title": "Time Series Analysis of Light Pollution Changes in West Java Using Satellite Imagery",
-      "publisher": "International Journal of Remote Sensing & Geoinformatics",
-      "date": "Jul 2024",
-      "description": "A research paper studying the growth of urban environments and artificial light emissions using Sentinel and VIIRS DNB data.",
-      "sort_order": 0
+      "title": "IoT-MQTT Protocol-Based Water Sensor System to Monitor Citarum River Water Quality using Arduino Uno R4 Wifi",
+      "publisher": "Jurnal Eltikom",
+      "date": "29 Jun 2025",
+      "description": "River water quality is critical for sustaining life, necessitating advanced monitoring technologies. This study presents a novel IoT-based water monitoring system using the Arduino Uno R4 WiFi and the MQTT protocol, offering significant improvements in real-time data acquisition, reliability, and accessibility. Unlike conventional systems, this approach uniquely integrates advanced microcontroller capabilities and efficient data transmission to address limitations in accuracy and usability in water quality monitoring. The system measures key indicators, including pH, temperature, total dissolved solids (TDS), and turbidity, and provides real-time updates via a solar-powered web interface. Using an exploratory sequential design, the study developed, calibrated, and tested the system, achieving high accuracy with relative errors of 2.50% for pH, 4.15% for temperature, 4.73% for TDS, and 3.08% for turbidity. Feedback from 59 residents near the Citarum River underscores the system's effectiveness and societal relevance, highlighting its potential to enhance public health, support sustainable environmental management, and set a new standard in water monitoring technology.\n\nhttps://doi.org/10.31961/eltikom.v9i1.1335",
+      "sort_order": 0,
+      "authors": "Winata Tegar Saputra Universitas Pendidikan Indonesia, Indonesia Eka Cahya Prima Universitas Pendidikan Indonesia, Indonesia Muhammad Cahyana Bintang Fajar Universitas Pendidikan Indonesia, Indonesia Muhammad Fahru Rozi Universitas Pendidikan Indonesia, Indonesia Nady Artan Destanto Universitas Pendidikan Indonesia, Indonesia Azzahra Siti Hadjar Universitas Pendidikan Indonesia, Indonesia Muhamad Nur Yasin Amadudin Universitas Pendidikan Indonesia, Indonesia Rizki Maulana Ashidiq National Taiwan Normal University, Taiwan",
+      "image_urls": []
     }
   ],
   "reference": [
     {
       "id": "ref-0",
-      "name": "Dr. Budi Rahardjo",
-      "relationship": "Research Supervisor",
-      "company": "Universitas Pendidikan Indonesia",
-      "email": "budi.rahardjo@upi.edu",
-      "description": "Bintang is an exceptional researcher and software engineer who consistently demonstrated top-tier problem-solving and software architecture capabilities during our research projects.",
+      "name": "Zulfikar Salam",
+      "relationship": "Shift Leader IT System Engineer",
+      "company": "LG Sinarmas",
+      "email": "",
+      "description": "",
+      "sort_order": 0,
+      "image_urls": []
+    },
+    {
+      "id": "reference-1781587068621",
+      "name": "Aryo Bagas Pamungkas",
+      "relationship": "Data Engineer",
+      "company": "MatchMade",
+      "email": "",
+      "phone": "",
+      "description": "",
+      "image_urls": [],
+      "sort_order": 0
+    },
+    {
+      "id": "reference-1781587108945",
+      "name": "Muhammad Fahru Rozi",
+      "relationship": "Software Engineer",
+      "company": "PT Artristik Studio Bandung",
+      "email": "",
+      "phone": "",
+      "description": "",
+      "image_urls": [],
       "sort_order": 0
     }
   ]
