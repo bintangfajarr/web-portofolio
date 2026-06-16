@@ -290,7 +290,11 @@
       "title": "4th Place Programming DIMAS TI AMLI",
       "organizer": "Universitas Negeri Semarang",
       "date": "Dec 2023",
-      "sort_order": 0
+      "sort_order": 0,
+      "image_urls": [
+        "/asset/awards/DIMASTI_2023_pemrograman.pdf"
+      ],
+      "description": "DIMAS-TI AMLI atau Pagelaran Mahasiswa Pendidikan, Matematika, Sains, dan Teknologi Informasi, merupakan salah satu program unggulan AMLI (Asosiasi MIPA LPTK Indonesia). DIMAS-TI AMLI saat ini telah menjadi salah satu kompetisi yang berkualitas dalam bidang MIPA (Matematika dan Ilmu Pengetahuan Alam) dan TIK (Teknologi Informasi dan Komunikasi)."
     },
     {
       "id": "award-1",
@@ -311,7 +315,11 @@
       "title": "Finalist National Programming Contest",
       "organizer": "Institut Teknologi Sepuluh Nopember",
       "date": "Oct 2022",
-      "sort_order": 3
+      "sort_order": 3,
+      "image_urls": [
+        "/asset/awards/NPC Senior_Muhammad Cahyana Bintang Fajar (2).jpg"
+      ],
+      "description": "Schematics National Programming Contest (NPC) adalah perlombaan Competitive Programming yang dilaksanakan oleh Departemen Teknik Informatika Institut Teknologi Sepuluh Nopember (ITS) setiap tahunnya."
     },
     {
       "id": "award-4",
